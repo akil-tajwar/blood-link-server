@@ -8,7 +8,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.fdbahux.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -26,19 +25,17 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-
     const usersCollection = client.db('bloodLinkDB').collection('users');
 
-    app.get('/users', async(req, res) => {
+    app.get('/users', async (req, res) => {
       const result = await usersCollection.find().toArray();
       res.send(result);
     })
 
-    app.post('/users', async(req, res) => {
-      const user = req.body;
-      console.log(user);
-      const result = await usersCollection.insertOne(user);
-      res.send(result);
+    app.post('/users', async (req, res) => {
+      const userData = req.body;
+      const insertedData = await usersCollection.insertOne(userData);
+      res.send(insertedData);
     });
 
     // Send a ping to confirm a successful connection
@@ -53,9 +50,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('blood is flowing');
+  res.send('blood is flowing');
 })
 
 app.listen(port, () => {
-    console.log(`blood is flowing on port ${port}`);
+  console.log(`blood is flowing on port ${port}`);
 })
