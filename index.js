@@ -28,7 +28,12 @@ async function run() {
     const usersCollection = client.db('bloodLinkDB').collection('users');
 
     app.get('/users', async (req, res) => {
-      const result = await usersCollection.find().toArray();
+      console.log(req.query.email);
+      let query = {};
+      if(req.query?.email) {
+        query = {email: req.query.email}
+      }
+      const result = await usersCollection.find(query).toArray();
       res.send(result);
     })
 
